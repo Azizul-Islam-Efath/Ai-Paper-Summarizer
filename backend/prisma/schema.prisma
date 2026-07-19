@@ -1,0 +1,344 @@
+// Prisma Schema - Research Paper Workspace
+// Version 2.0 - Full multi-paper, project-based schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// USERS
+// ============================================================
+model User {
+  id             String   @id @default(uuid())
+  name           String
+  email          String   @unique
+  password       String
+  role           Role     @default(USER)
+  avatarUrl      String?
+  isEmailVerified Boolean @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  projects        Project[]
+  papers          Paper[]
+  summaries       Summary[]
+  generatedPapers GeneratedPaper[]
+  activityLogs    ActivityLog[]
+  refreshTokens   RefreshToken[]
+  passwordResets  PasswordReset[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique @db.VarChar(500)
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_resets")
+}
+
+// ============================================================
+// PROJECTS
+// ============================================================
+model Project {
+  id          String        @id @default(uuid())
+  name        String
+  description String?       @db.Text
+  status      ProjectStatus @default(ACTIVE)
+  userId      String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  papers           Paper[]
+  generatedPapers  GeneratedPaper[]
+  comparisons      Comparison[]
+  researchGaps     ResearchGap[]
+
+  @@map("projects")
+}
+
+// ============================================================
+// PAPERS
+// ============================================================
+model Paper {
+  id          String     @id @default(uuid())
+  title       String     @db.VarChar(1000)
+  uploadType  UploadType @default(PDF)
+  filePath    String?
+  fileName    String?
+  fileSize    Int?
+  status      PaperStatus @default(PROCESSING)
+  isFavorite  Boolean    @default(false)
+  userId      String
+  projectId   String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project    Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  metadata   PaperMetadata?
+  content    PaperContent?
+  summary    Summary?
+
+  @@map("papers")
+}
+
+model PaperMetadata {
+  id          String   @id @default(uuid())
+  paperId     String   @unique
+  authors     Json     @default("[]")
+  journal     String?
+  conference  String?
+  year        Int?
+  doi         String?
+  keywords    Json     @default("[]")
+  abstract    String?  @db.LongText
+  volume      String?
+  issue       String?
+  pages       String?
+  publisher   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@map("paper_metadata")
+}
+
+model PaperContent {
+  id         String   @id @default(uuid())
+  paperId    String   @unique
+  rawText    String   @db.LongText
+  wordCount  Int      @default(0)
+  charCount  Int      @default(0)
+  language   String   @default("en")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@map("paper_content")
+}
+
+// ============================================================
+// SUMMARIES
+// ============================================================
+model Summary {
+  id                 String   @id @default(uuid())
+  paperId            String   @unique
+  userId             String
+  // Core fields
+  abstractSummary    String?  @db.LongText
+  researchProblem    String?  @db.LongText
+  objectives         String?  @db.LongText
+  methodology        String?  @db.LongText
+  dataset            String?  @db.LongText
+  algorithms         String?  @db.LongText
+  experiments        String?  @db.LongText
+  results            String?  @db.LongText
+  advantages         String?  @db.LongText
+  limitations        String?  @db.LongText
+  futureWork         String?  @db.LongText
+  novelContributions String?  @db.LongText
+  importantEquations String?  @db.LongText
+  keyContributions   String?  @db.LongText
+  novelty            String?  @db.LongText
+  applications       String?  @db.LongText
+  disadvantages      String?  @db.LongText
+  conclusion         String?  @db.LongText
+  references         Json     @default("[]")
+  keywords           Json     @default("[]")
+  // Metadata snapshot
+  year               Int?
+  authors            Json     @default("[]")
+  journal            String?
+  accuracy           String?
+  // Sharing
+  shareToken         String?  @unique
+  shareExpiresAt     DateTime?
+  isShared           Boolean  @default(false)
+  citation           String?  @db.Text
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("summaries")
+}
+
+// ============================================================
+// COMPARISONS
+// ============================================================
+model Comparison {
+  id              String   @id @default(uuid())
+  projectId       String
+  status          AIStatus @default(PENDING)
+  // AI Output (stored as JSON for flexibility)
+  similarityMatrix    Json?    @default("{}")
+  researchTimeline    Json?    @default("[]")
+  methodComparison    Json?    @default("{}")
+  algorithmComparison Json?    @default("{}")
+  datasetComparison   Json?    @default("{}")
+  strengths           Json?    @default("[]")
+  weaknesses          Json?    @default("[]")
+  contradictions      Json?    @default("[]")
+  commonFindings      Json?    @default("[]")
+  missingTopics       Json?    @default("[]")
+  researchTrends      Json?    @default("[]")
+  rawContent          String?  @db.LongText
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("comparisons")
+}
+
+// ============================================================
+// RESEARCH GAPS
+// ============================================================
+model ResearchGap {
+  id                     String   @id @default(uuid())
+  projectId              String
+  status                 AIStatus @default(PENDING)
+  // AI Output
+  unsolvedProblems       Json?    @default("[]")
+  poorMethodologies      Json?    @default("[]")
+  datasetWeaknesses      Json?    @default("[]")
+  performanceIssues      Json?    @default("[]")
+  futureOpportunities    Json?    @default("[]")
+  potentialContributions Json?    @default("[]")
+  rawContent             String?  @db.LongText
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("research_gaps")
+}
+
+// ============================================================
+// GENERATED PAPERS
+// ============================================================
+model GeneratedPaper {
+  id                String          @id @default(uuid())
+  projectId         String
+  userId            String
+  title             String          @db.VarChar(1000)
+  status            AIStatus        @default(PENDING)
+  format            AcademicFormat  @default(IEEE)
+  // Paper Sections
+  abstractText      String?         @db.LongText
+  keywords          Json            @default("[]")
+  introduction      String?         @db.LongText
+  relatedWork       String?         @db.LongText
+  literatureReview  String?         @db.LongText
+  researchGap       String?         @db.LongText
+  objectives        String?         @db.LongText
+  methodology       String?         @db.LongText
+  systemDesign      String?         @db.LongText
+  experimentalSetup String?         @db.LongText
+  results           String?         @db.LongText
+  discussion        String?         @db.LongText
+  limitations       String?         @db.LongText
+  futureWork        String?         @db.LongText
+  conclusion        String?         @db.LongText
+  references        Json            @default("[]")
+  // Full content for export
+  fullContent       String?         @db.LongText
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("generated_papers")
+}
+
+// ============================================================
+// ACTIVITY LOGS
+// ============================================================
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String
+  entity    String?
+  entityId  String?
+  metadata  Json?    @default("{}")
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+enum Role {
+  USER
+  ADMIN
+}
+
+enum UploadType {
+  PDF
+  TEXT
+}
+
+enum PaperStatus {
+  PROCESSING
+  READY
+  ERROR
+  SUMMARIZING
+  SUMMARIZED
+}
+
+enum ProjectStatus {
+  ACTIVE
+  ARCHIVED
+  COMPLETED
+}
+
+enum AIStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum AcademicFormat {
+  IEEE
+  SPRINGER
+  ELSEVIER
+  APA
+}

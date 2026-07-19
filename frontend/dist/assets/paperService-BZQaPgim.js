@@ -1,0 +1,14 @@
+import { e as p } from "./index-DZyWQ_ka.js";
+const r = {
+  uploadPdf: (e, a) =>
+    p.post("/papers/upload", e, {
+      headers: { "Content-Type": "multipart/form-data" },
+      onUploadProgress: a,
+    }),
+  uploadText: (e) => p.post("/papers/text", e),
+  getPapers: (e) => p.get("/papers", { params: e }),
+  getPaper: (e) => p.get(`/papers/${e}`),
+  deletePaper: (e) => p.delete(`/papers/${e}`),
+  toggleFavorite: (e) => p.patch(`/papers/${e}/favorite`),
+};
+export { r as p };

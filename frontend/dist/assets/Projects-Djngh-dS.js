@@ -1,0 +1,315 @@
+import {
+  r as s,
+  j as e,
+  d as w,
+  z as n,
+  m as P,
+  L as C,
+} from "./index-DZyWQ_ka.js";
+import { p as h } from "./projectService-DGqb61Ez.js";
+import { B as i } from "./Button-aWfo-XhU.js";
+import { I as S } from "./Input-CApCRiSe.js";
+import { T as L } from "./TextArea-BKR1Xe1W.js";
+import { M as f } from "./Modal-BXTU8Nh-.js";
+import { E as D } from "./EmptyState-Bdr6fCFb.js";
+import { S as M } from "./SearchBar-BAo6HqGB.js";
+const O = ({ project: r, onDelete: d }) => {
+    var a, c;
+    const [x, o] = s.useState(!1);
+    return e.jsxs(e.Fragment, {
+      children: [
+        e.jsxs(P.div, {
+          layout: !0,
+          initial: { opacity: 0, y: 20 },
+          animate: { opacity: 1, y: 0 },
+          className: "card card-hover p-6 flex flex-col justify-between",
+          children: [
+            e.jsxs("div", {
+              children: [
+                e.jsxs("div", {
+                  className: "flex justify-between items-start mb-3",
+                  children: [
+                    e.jsx("h3", {
+                      className:
+                        "text-xl font-bold text-gray-900 dark:text-white truncate max-w-[80%]",
+                      children: r.name,
+                    }),
+                    e.jsx("span", {
+                      className:
+                        "px-2.5 py-1 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 text-xs font-semibold uppercase",
+                      children: r.status.toLowerCase(),
+                    }),
+                  ],
+                }),
+                e.jsx("p", {
+                  className:
+                    "text-gray-500 dark:text-gray-400 text-sm mb-6 line-clamp-3 h-12",
+                  children: r.description || "No description provided.",
+                }),
+                e.jsxs("div", {
+                  className:
+                    "grid grid-cols-2 gap-4 mb-6 border-t border-b border-gray-100 dark:border-gray-700 py-4",
+                  children: [
+                    e.jsxs("div", {
+                      className: "text-center",
+                      children: [
+                        e.jsx("p", {
+                          className:
+                            "text-2xl font-bold text-gray-900 dark:text-white",
+                          children:
+                            ((a = r._count) == null ? void 0 : a.papers) || 0,
+                        }),
+                        e.jsx("p", {
+                          className:
+                            "text-xs text-gray-400 dark:text-gray-500 uppercase font-semibold",
+                          children: "Papers",
+                        }),
+                      ],
+                    }),
+                    e.jsxs("div", {
+                      className: "text-center",
+                      children: [
+                        e.jsx("p", {
+                          className:
+                            "text-2xl font-bold text-gray-900 dark:text-white",
+                          children:
+                            ((c = r._count) == null
+                              ? void 0
+                              : c.generatedPapers) || 0,
+                        }),
+                        e.jsx("p", {
+                          className:
+                            "text-xs text-gray-400 dark:text-gray-500 uppercase font-semibold",
+                          children: "Generated",
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            e.jsxs("div", {
+              className:
+                "flex gap-2 mt-4 pt-2 border-t border-gray-100 dark:border-gray-700",
+              children: [
+                e.jsx(C, {
+                  to: `/dashboard/projects/${r.id}`,
+                  className:
+                    "flex-1 text-center py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm",
+                  children: "Open Workspace",
+                }),
+                e.jsx("button", {
+                  onClick: () => o(!0),
+                  className:
+                    "p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-400 hover:text-red-500 hover:border-red-200 dark:hover:bg-red-950/20 transition-all",
+                  children: e.jsx("svg", {
+                    className: "w-5 h-5",
+                    fill: "none",
+                    stroke: "currentColor",
+                    viewBox: "0 0 24 24",
+                    children: e.jsx("path", {
+                      strokeLinecap: "round",
+                      strokeLinejoin: "round",
+                      strokeWidth: 2,
+                      d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16",
+                    }),
+                  }),
+                }),
+              ],
+            }),
+          ],
+        }),
+        e.jsxs(f, {
+          isOpen: x,
+          onClose: () => o(!1),
+          title: "Delete Project",
+          children: [
+            e.jsxs("p", {
+              className: "text-gray-600 dark:text-gray-300 mb-6",
+              children: [
+                "Are you sure you want to delete the project ",
+                e.jsxs("strong", { children: ['"', r.name, '"'] }),
+                "? All uploaded papers, summaries, and generated papers inside this project will be permanently deleted. This action cannot be undone.",
+              ],
+            }),
+            e.jsxs("div", {
+              className: "flex gap-3 justify-end",
+              children: [
+                e.jsx(i, {
+                  variant: "ghost",
+                  onClick: () => o(!1),
+                  children: "Cancel",
+                }),
+                e.jsx(i, {
+                  variant: "danger",
+                  onClick: () => {
+                    (d(r.id), o(!1));
+                  },
+                  children: "Delete Project",
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    });
+  },
+  W = () => {
+    const [r, d] = s.useState([]),
+      [x, o] = s.useState(!0),
+      [a, c] = s.useState(""),
+      [b, l] = s.useState(!1),
+      [v, j] = s.useState(!1),
+      [p, u] = s.useState(""),
+      [g, y] = s.useState(""),
+      m = async () => {
+        try {
+          const t = await h.getProjects({ search: a });
+          d(t.data.data);
+        } catch {
+          n.error("Failed to load projects");
+        } finally {
+          o(!1);
+        }
+      };
+    s.useEffect(() => {
+      m();
+    }, [a]);
+    const N = async (t) => {
+        if ((t.preventDefault(), !!p.trim())) {
+          j(!0);
+          try {
+            (await h.createProject({ name: p, description: g }),
+              n.success("Project created successfully!"),
+              u(""),
+              y(""),
+              l(!1),
+              m());
+          } catch {
+            n.error("Failed to create project");
+          } finally {
+            j(!1);
+          }
+        }
+      },
+      k = async (t) => {
+        try {
+          (await h.deleteProject(t), n.success("Project deleted"), m());
+        } catch {
+          n.error("Failed to delete project");
+        }
+      };
+    return e.jsxs("div", {
+      className: "space-y-6",
+      children: [
+        e.jsxs("div", {
+          className:
+            "flex flex-col sm:flex-row sm:items-center justify-between gap-4",
+          children: [
+            e.jsxs("div", {
+              children: [
+                e.jsx("h1", {
+                  className: "text-3xl font-bold text-gray-900 dark:text-white",
+                  children: "Research Projects",
+                }),
+                e.jsx("p", {
+                  className: "text-gray-500 dark:text-gray-400",
+                  children:
+                    "Organize and manage multi-paper research workspaces.",
+                }),
+              ],
+            }),
+            e.jsxs(i, {
+              onClick: () => l(!0),
+              children: [
+                e.jsx("svg", {
+                  className: "w-5 h-5 mr-2",
+                  fill: "none",
+                  stroke: "currentColor",
+                  viewBox: "0 0 24 24",
+                  children: e.jsx("path", {
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: 2,
+                    d: "M12 4v16m8-8H4",
+                  }),
+                }),
+                "New Project",
+              ],
+            }),
+          ],
+        }),
+        e.jsx("div", {
+          className: "flex gap-4",
+          children: e.jsx(M, {
+            onSearch: c,
+            placeholder: "Search projects...",
+            className: "flex-1",
+          }),
+        }),
+        x
+          ? e.jsx("div", {
+              className: "flex justify-center py-12",
+              children: e.jsx(w, { size: "lg" }),
+            })
+          : r.length === 0
+            ? e.jsx(D, {
+                title: a ? "No matches found" : "No projects yet",
+                description: a
+                  ? "Try adjusting your search keywords."
+                  : "Create a research project to start uploading papers and generating literature syntheses.",
+                action: () => l(!0),
+                actionLabel: "Create Project",
+              })
+            : e.jsx("div", {
+                className:
+                  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                children: r.map((t) =>
+                  e.jsx(O, { project: t, onDelete: k }, t.id),
+                ),
+              }),
+        e.jsx(f, {
+          isOpen: b,
+          onClose: () => l(!1),
+          title: "Create New Research Project",
+          children: e.jsxs("form", {
+            onSubmit: N,
+            className: "space-y-5",
+            children: [
+              e.jsx(S, {
+                label: "Project Name",
+                placeholder: "e.g., Deep Learning in Oncology",
+                value: p,
+                onChange: (t) => u(t.target.value),
+                required: !0,
+              }),
+              e.jsx(L, {
+                label: "Description",
+                placeholder:
+                  "Describe the research direction, themes, or goals of this workspace...",
+                value: g,
+                onChange: (t) => y(t.target.value),
+                rows: 4,
+              }),
+              e.jsxs("div", {
+                className: "flex justify-end gap-3 pt-4",
+                children: [
+                  e.jsx(i, {
+                    variant: "ghost",
+                    onClick: () => l(!1),
+                    children: "Cancel",
+                  }),
+                  e.jsx(i, {
+                    type: "submit",
+                    isLoading: v,
+                    children: "Create Project",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        }),
+      ],
+    });
+  };
+export { W as default };
