@@ -268,8 +268,6 @@ git push origin feature/new-feature
 
 **Azizul Islam Efath**
 
-Computer Science & Engineering Student
-
 GitHub:
 https://github.com/Azizul-Islam-Efath
 
