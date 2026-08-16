@@ -236,7 +236,7 @@ const LandingPage = () => {
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"
               style={{ boxShadow: '0 0 6px rgba(74,222,128,0.8)' }}
             />
-            Powered by Claude AI · Research Made Intelligent
+            Powered by Gemini 3.6 Flash · Research Made Intelligent
           </motion.div>
 
           {/* Headline */}
@@ -402,7 +402,7 @@ const LandingPage = () => {
               delay={0.1}
               icon={<svg className="w-6 h-6" style={{ color: '#e879f9' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>}
               title="AI-Powered Summaries"
-              description="Claude AI generates structured summaries with methodology, findings, and key contributions."
+              description="Gemini AI generates structured summaries with methodology, findings, and key contributions."
               gradient="linear-gradient(135deg, rgba(196,78,240,0.08), rgba(124,77,255,0.04))"
             />
             <FeatureCard
@@ -481,7 +481,7 @@ const LandingPage = () => {
             <StepCard
               number="2" delay={0.15}
               title="AI Analyzes & Summarizes"
-              description="Claude AI extracts structured insights — methodology, findings, limitations — in seconds."
+              description="Gemini AI extracts structured insights — methodology, findings, limitations — in seconds."
             />
             <StepCard
               number="3" delay={0.3}
@@ -559,7 +559,7 @@ const LandingPage = () => {
           background: '#0f0a1e',
         }}
       >
-        © 2026 Azizul Islam · All Rights Reserved
+        © 2026 Paper Generator · All Rights Reserved
       </footer>
     </AnimatedBackground>
   )
