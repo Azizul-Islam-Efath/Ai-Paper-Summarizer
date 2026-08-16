@@ -1,0 +1,44 @@
+# ─── Dependencies ─────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ─── Build outputs ────────────────────────────────────────────────────────────
+dist/
+build/
+frontend/dist/
+
+# ─── Environment files (NEVER commit secrets) ─────────────────────────────────
+.env
+.env.local
+.env.production.local
+backend/.env
+frontend/.env.local
+frontend/.env.production.local
+
+# ─── Uploaded files (ephemeral on Render) ─────────────────────────────────────
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+
+# ─── OS / Editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ─── Prisma ───────────────────────────────────────────────────────────────────
+backend/prisma/migrations/
+
+# ─── Temp / Test scripts ──────────────────────────────────────────────────────
+fix_*.js
+test_*.js
+test_*.mjs
+fix_*.mjs
+reset_*.js
+list_models.js
+cleanup.js
